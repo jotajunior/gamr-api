@@ -1,0 +1,89 @@
+Info Rep for Project G.A.M.R.
+
+Tools/Languages: HTML, CSS, MongoDB, Node.js, javascript
+
+Content
+About us: Don't have all texts
+Results: Small updates, and icons and slogans for gamer type
+Identity: Add Preferred role/lane?
+Start: Update IC
+
+LOT-R qs need to be on Brain Type Page and not Gamer Type Page
+
+
+Surveys
+IPIP 50-item
+http://ipip.ori.org/New_IPIP-50-item-scale.htm
+SQ-S (25 item), EQ-S (23 item): 
+http://www.researchgate.net/profile/Richard_Smith7/publication/222549431_Development_of_short_forms_of_the_Empathy_Quotient_(EQ-Short)_and_the_Systemizing_Quotient_(SQ-Short)/links/0fcfd50bb4aff44e11000000.pdf
+
+Life Orientation Test - Revised 10-item
+http://www.psy.miami.edu/faculty/ccarver/sclLOT-R.html
+
+Motivation questionnaire: see excel file.
+
+Design
+Target: See .ai file. 
+CSS done by Shos. Still bugged. Needs to be fixed when HTML is stable-ish
+Icons on Result page still coming
+
+
+Server
+Get support from NecSys (todo: Shos)
+We are using apache2 on ubuntu
+after you login our server in your mac's terminal as:
+$ ssh  XXXXXXXX@projectgamr.media.mit.edu 
+$enter your password:  OOOOOOOO
+
+XXXXXXXX is your server id 
+OOOOOOO is your password
+
+you can find our website setting file in apache is at:    
+$ cd    /etc/apache2/sites-available
+
+
+
+
+
+
+Scrapers
+Github repo: https://github.com/jotajunior/scrapers (ask jota to add you)
+
+-WoW: 1.2 sec
+-LoL: ?
+-BFH: 5 sec
+
+Now, getting all information I think you need for WoW (statistics, achievements and if user exists).
+This is all the information you get from these calls:
+
+Statistics:
+{'Total kills': 108235, 'Most Alliance factions at Exalted': 3, 'Total damage done': 4036161247, 'Smelting Recipes learned': 30, 'Creatures killed': 66068, 'Total healing done': 365699121, 'Engineering Schematics learned': 224, 'Total damage received': 1102747531, 'Total kills that grant experience or honor': 67133, 'Total healing received': 717221803}
+Achievements:
+{'dungeons': [677, 840], 'professions': [198, 229], 'events': [214, 225], 'garrisons': [87, 98], 'collections': [27, 30], 'general': [57, 60], 'strength': 35, 'pet_battles': [57, 102], 'total': [2052, 2420], 'reputation': [58, 81], 'scenarios': [64, 77], 'exploration': [142, 143], 'legacy': [70, 1], 'pvp': [209, 284], 'quests': [192, 250]}
+User exists:
+True
+-----
+As these requests require me to download the webpage, they are a little bit costly. So, to get all this information, my computer takes around 1.2sec. It grows linearly: if I make 10 of those requests, it takes approximately 10secs.
+On the server it'll much faster, but will still take a inevitable and reasonably large amount of time. To avoid that, I already planned to create an API and, in addition, will add a queue to handle requests. As George will probably use Node.js, any timing/IO blocking issue may be easily addressed.
+Finally, answering to the other e-mail, I don't know exactly the size of the response we are expecting to have, but we'll specially need good transfer quotas rather than others, at least for my part.
+
+Security
+
+First off, securing Ubuntu. This is a good place to start:
+http://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers
+
+If you give me an account and add me to /etc/sudoers, I would be happy to install our fail2ban rulesets for apache and ssh.
+
+Next, I spoke with our programmer and basically as far as python, mongodb and node.js go, mostly, they should be kept up-to-date. Secondly, how vulnerable these are depends highly on the code you produce. I asked our guys to Google around for some best practices to share with you, but I have not heard back from them yet.
+
+Finally, as far as dual-factor authentication goes, we would be happy to install Duo on your machine and make it so that when you ssh to your machine, in addition to a key, you would also need to authenticate via your phone.
+
+Let me know if you have any questions, or if you need my SSH public key to set up an account for me.
+
+-----------------------------------
+
+Regarding mongodb: I'm told that by default, mongodb is configured to accept network connections. If your web app is the only thing that should be communicating with your db locally, then you should turn off this functionality. See:
+http://stackoverflow.com/questions/4961177/how-to-listen-only-to-localhost-on-mongodb
+
+Also, Security Checklist for mongodb:
+http://docs.mongodb.org/manual/administration/security-checklist/
