@@ -13,14 +13,20 @@ class Riot:
     base_summoner_url = None
 
     MAX_ID_LIST = 40
+    
+    def __init__(self, region=None):
+        self.api_key = self.RIOT_API_KEY
+        self.set_region(region)
+        self.init_valid_regions()
+        self.init_base_url()
 
     def check_region(self):
         if not self.region or self.region not in self.valid_regions:
             raise Exception('You need to provide a valid region for this call.')
 
     def init_valid_regions(self):
-        self.valid_regions = ['br', 'eune', 'euw', 'kr', 'lan', \
-                              'las', 'na', 'oce', 'ru', 'tr' \
+        self.valid_regions = ['br', 'eune', 'euw', 'kr', 'lan',
+                              'las', 'na', 'oce', 'ru', 'tr',
                              ]
 
     def init_base_url(self):
@@ -32,8 +38,8 @@ class Riot:
             return True
 
         self.check_region()
-        base_summoner_suffix = self.base_summoner_suffix.format(self.region \
-                                                               ,self.summoner_version \
+        base_summoner_suffix = self.base_summoner_suffix.format(self.region,
+                                                               self.summoner_version,
                                                                )
         self.base_summoner_url = self.base_api_url + base_summoner_suffix
 
@@ -43,11 +49,6 @@ class Riot:
     def set_region(self, region):
         self.region = self.standardize_name(region) 
 
-    def __init__(self, api_key, region=None):
-        self.api_key = api_key
-        self.set_region(region)
-        self.init_valid_regions()
-        self.init_base_url()
 
     def standardize_name(self, name):
         if not name or not isinstance(name, str):
