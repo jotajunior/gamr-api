@@ -14,6 +14,7 @@ class Wow:
     statistics = None
 
     character_text = None
+    achievement_text = None
 
     def __init__(self, region='us'):
         region = region.lower()

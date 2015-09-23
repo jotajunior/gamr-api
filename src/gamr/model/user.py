@@ -1,5 +1,5 @@
 from gamr.scrapers import bfhl, wow, riot
-from gamr.exception import InvalidGameException
+from gamr.exception.invalid_game_exception import InvalidGameException
 
 class User:
     games = ['bfhl',
@@ -8,19 +8,27 @@ class User:
             'lol',
             ]
 
-    def exists_wow(self, name, world):
-        wow_obj = wow.Wow()
+    def exists_wow(self, name, world, region):
+        if not name or not world or not region:
+            return None
+        wow_obj = wow.Wow(region)
         return wow_obj.user_exists(name, world)
 
     def exists_bfhl(self, name, platform):
+        if not name or not platform:
+            return None
         bfhl_obj = bfhl.BFHL()
         return bfhl_obj.user_exists(name, platform)
 
     def exists_bf4(self, name, platform):
+        if not name or not platform:
+            return None
         bf4_obj = bfhl.BF4(platform)
         return bf4_obj.user_exists(name)
 
     def exists_lol(self, name, region):
+        if not name or not region:
+            return None
         lol_obj = riot.Riot(region)
         return lol_obj.user_exists_by_name(name)
 
@@ -44,23 +52,23 @@ class User:
             return self.exists_lol(kwargs['name'],
                                    kwargs['region'],
                                    )
-    def exists_all(self, wow_name, wow_world,
+    def exists_all(self, wow_name, wow_world, wow_region,
                    bfhl_name, bfhl_platform,
                    bf4_name, bf4_platform,
-                   lol_name, lol_platform,
+                   lol_name, lol_region,
                    ):
         result = {}
-        result['wow'] = self.exists_wow(wow_name, wow_world)
+        result['wow'] = self.exists_wow(wow_name, wow_world, wow_region)
         result['bfhl'] = self.exists_bfhl(bfhl_name, bfhl_platform)
         result['bf4'] = self.exists_bf4(bf4_name, bf4_platform)
         result['lol'] = self.exists_lol(lol_name, lol_region)
 
         return result
 
-    def is_registered_all(self, wow_name, wow_world,
+    def is_registered_all(self, wow_name, wow_world, wow_region,
                           bfhl_name, bfhl_platform,
                           bf4_name, bf4_platform,
-                          lol_name, lol_platform,
+                          lol_name, lol_region,
                           ):
         result = {}
         result['wow'] = True
@@ -70,3 +78,43 @@ class User:
 
         return result
 
+    def get_status_all(self, wow_name, wow_world, wow_region,
+                       bfhl_name, bfhl_platform,
+                       bf4_name, bf4_platform,
+                       lol_name, lol_region,
+                       ):
+
+        result_exists = self.exists_all(wow_name,
+                                        wow_world,
+                                        wow_region,
+                                        bfhl_name,
+                                        bfhl_platform,
+                                        bf4_name,
+                                        bf4_platform,
+                                        lol_name,
+                                        lol_region,
+                                        )
+
+        result_registered = self.is_registered_all(wow_name,
+                                                   wow_world,
+                                                   wow_region,
+                                                   bfhl_name,
+                                                   bfhl_platform,
+                                                   bf4_name,
+                                                   bf4_platform,
+                                                   lol_name,
+                                                   lol_region,
+                                                   )
+        result = {}
+        games = set(result_exists.keys()) | set(result_registered.keys())
+
+        for game in games:
+            result[game] = 0
+            result[game] += 1 if result_exists.get(game, False) else 0
+            result[game] += 2 if result_registered.get(game, False) else 0
+
+        return result
+
+    def save_personal_info(self, birth_year, birth_month,
+                           country, english_level, gender):
+        return True
