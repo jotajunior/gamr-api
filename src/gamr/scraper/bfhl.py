@@ -42,13 +42,16 @@ class BFHL:
         data['name'] = name
         url = self.base_url + '/playerInfo'
 
-        return requests.get(url, params=data).text
+        r = requests.get(url, params=data, stream=True)
+        chunk_size = 200
+        return next(r.iter_content(chunk_size=chunk_size))
 
     def user_exists(self, name, platform=None):
         if not platform:
             platform = self.platform
 
         result = self.get_player_by_name(name, 'json', platform)
+        print(result)
         return result != '{"error":"notFound"}'
 
 class BF4(BFHL):
