@@ -1,4 +1,4 @@
-from gamr.scrapers import bfhl, wow, riot
+from gamr.scraper import bfhl, wow, riot
 from gamr.exception.invalid_game_exception import InvalidGameException
 
 class User:
@@ -106,15 +106,33 @@ class User:
                                                    lol_region,
                                                    )
         result = {}
-        games = set(result_exists.keys()) | set(result_registered.keys())
 
-        for game in games:
-            result[game] = 0
-            result[game] += 1 if result_exists.get(game, False) else 0
-            result[game] += 2 if result_registered.get(game, False) else 0
+        names = {}
+        names['wow'] = wow_name
+        names['bfhl'] = bfhl_name
+        names['bf4'] = bf4_name
+        names['lol'] = lol_name
 
+        for game in self.games:
+            if game not in result:
+                result[game] = {}
+            result[game]['status'] = 'invalid'
+            if result_exists.get(game, False):
+                result[game]['status'] = 'good'
+            if result_registered.get(game, False):
+                result[game]['status'] = 'taken'
+            result[game]['name'] = names[game]
+        
         return result
+
 
     def save_personal_info(self, birth_year, birth_month,
                            country, english_level, gender):
         return True
+
+if __name__ == '__main__':
+    a = User()
+    print(a.get_status_all('quelthalas', 'amanthul', 'us',
+                            'xtreme', 'pc',
+                            'xdfjkghdgf', 'pc',
+                            'quelthalas', 'na'))
