@@ -1,6 +1,0 @@
-setup.py
-src/gamr.egg-info/PKG-INFO
-src/gamr.egg-info/SOURCES.txt
-src/gamr.egg-info/dependency_links.txt
-src/gamr.egg-info/requires.txt
-src/gamr.egg-info/top_level.txt
