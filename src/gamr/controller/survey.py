@@ -8,4 +8,4 @@ class Survey:
     def submit(self, surveys):
         self.model.init_responses(surveys)
         result = self.model.save()
-        view.Survey.show_submit(result)
+        return view.Survey.show_submit(result)

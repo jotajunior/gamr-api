@@ -71,9 +71,9 @@ class User:
                           lol_name, lol_region,
                           ):
         result = {}
-        result['wow'] = True
-        result['bfhl'] = True
-        result['bf4'] = True
+        result['wow'] = False
+        result['bfhl'] = False
+        result['bf4'] = False
         result['lol'] = True
 
         return result
@@ -129,10 +129,3 @@ class User:
     def save_personal_info(self, birth_year, birth_month,
                            country, english_level, gender):
         return True
-
-if __name__ == '__main__':
-    a = User()
-    print(a.get_status_all('quelthalas', 'amanthul', 'us',
-                            'xtreme', 'pc',
-                            'xdfjkghdgf', 'pc',
-                            'quelthalas', 'na'))
