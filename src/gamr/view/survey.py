@@ -1,5 +1,4 @@
 class Survey:
     @staticmethod
     def show_submit(result):
-        template = '{\'status\': \'{}\'}'
-        return template.format('ok') if result else template.format('error')
+        return '{"status": "ok"}' if result else '{"status": "error"}'

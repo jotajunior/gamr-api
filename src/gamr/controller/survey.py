@@ -1,11 +1,11 @@
-from gamr import model
-from gamr import view
+from gamr.model.survey import Survey as SurveyModel
+from gamr.view.survey import Survey as SurveyView
 
 class Survey:
     def __init__(self):
-        self.model = model.Survey()
+        self.model = SurveyModel()
 
     def submit(self, surveys):
         self.model.init_responses(surveys)
         result = self.model.save()
-        return view.Survey.show_submit(result)
+        return SurveyView.show_submit(result)

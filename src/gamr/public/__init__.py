@@ -27,5 +27,10 @@ def user_post():
                       )
     return result
 
+@app.route('/questions', methods=['POST'])
+def questions_post():
+    result = Survey().submit(request.form['surveys'])
+    return result
+
 if __name__ == '__main__':
     app.run(debug=True)
